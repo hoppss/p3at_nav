@@ -523,6 +523,7 @@ int main( int argc, char** argv) {
 				cmd.c_str(), cam.c_str(),
 				pose.c_str(), ptz.c_str(), image.c_str());
 		achar_lixo.print();
+		/*
 		std::vector<int> missao;
 		for ( int i=0; i<1; i++) {
 			missao.push_back(1);
@@ -587,6 +588,7 @@ int main( int argc, char** argv) {
 			missao.push_back(5);
 		}
 		achar_lixo.exec_mission(missao);
+			*/
 	
 		achar_lixo.exec();
 	}
