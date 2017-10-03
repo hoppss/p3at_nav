@@ -1,0 +1,20 @@
+<launch>
+  <node pkg="rosaria" type="RosAria" name="RosAria" output="screen">
+    <param name="port" value="/dev/ttyS0" />
+  </node>
+
+  <node pkg="lms1xx" type="LMS1xx_node" name="LMS1xx_node" output="screen">
+    <param name="host" value="10.208.6.224" />
+  </node>
+
+	<node
+	pkg="tf"
+	type="static_transform_publisher"
+	name="laser_to_base_link"
+	args="0.215 0 0.13 0 0 0 /base_link /laser 100"
+	/>
+
+
+  <node pkg="gmapping" type="slam_gmapping" name="gmapping_slam" output="screen" >
+  </node>
+</launch>

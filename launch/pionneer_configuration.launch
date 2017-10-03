@@ -1,0 +1,39 @@
+<launch>
+	<!--
+	<node pkg="move_base" type="move_base" respawn="false" 
+		name="move_base" output="screen">
+	 	<rosparam file="$(find pioneer_2dnav)/config/costmap_common_params.yaml" 
+			command="load" ns="global_costmap" />
+ 		<rosparam file="$(find pioneer_2dnav)/config/costmap_common_params.yaml" 
+			command="load" ns="local_costmap" />
+ 		<rosparam file="$(find pioneer_2dnav)/config/local_costmap_params.yaml" 
+			command="load" />
+ 		<rosparam file="$(find pioneer_2dnav)/config/global_costmap_params.yaml" 
+			command="load" />
+		<rosparam file="$(find pioneer_2dnav)/config/dwa_local_planner_params.yaml" 
+			command="load" />
+ 		<rosparam file="$(find pioneer_2dnav)/config/move_base_params.yaml" 
+			command="load" />
+		<rosparam file="$(find pioneer_2dnav)/config/global_planner_params.yaml" 
+			command="load" />
+	</node>
+
+	<node pkg="map_server" type="map_server" name="map_server" 
+		args="$(find pioneer_2dnav)/config/map.yaml" >
+	</node>
+
+	-->
+
+	<node pkg="rosaria" type="RosAria" name="RosAria" output="screen">
+		<remap from="RosAria/cmd_vel" to="cmd_vel" />
+		<param name="port" value="/dev/ttyS0" />
+	</node>
+
+	<!--
+	<node pkg="pionner_2dnav" type="tf_broadcaster" name="broadcaster">
+	</node>
+	-->
+
+	<node name="relay_map_odom" pkg="topic_tools" type="relay" args="map odom"/>
+
+</launch>

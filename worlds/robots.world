@@ -1,0 +1,152 @@
+define hokuyolaser ranger
+(
+	sensor(
+		range [ 0.0  5.0 ]
+		fov 270.0
+		samples 270
+	)
+	color "blue"
+	size [ 0.07 0.07 0.05 ]
+)
+
+
+define sicksensor sensor
+(				
+  # factory settings for LMS200	
+  range [ 0.0 25.0 ]
+  pose [ 0 0 0.1 0 ]
+  fov 270.0
+  samples 270
+  #samples 90 # still useful but much faster to compute
+  color_rgba [0 0 1 0.30]
+)
+
+define sickcommon ranger
+(
+	color "blue"
+	size [ 0.156 0.155 0.19 ] # dimensions from LMS200 data sheet	
+)
+
+define sickbase sickcommon
+(
+	block( points 4
+		point[0] [0 0]
+		point[1] [0 1]
+		point[2] [1 1]
+		point[3] [1 0]
+		z [0 0.21]
+	)
+)
+
+define sicklaser sickbase ( sicksensor() )
+
+define axis camera
+(
+	# laser properties
+	#resolution [ 200 30 ]
+	resolution [ 300 30 ]
+	range [ 0.2 8.0 ]
+	fov [ 70.0 40.0 ]
+	pantilt [ 0.0 0.0 ]
+
+	# model properties
+	size [ 0.15 0.1 0.05 ]
+	color "white"
+	#watts 100.0
+	alwayson 1
+)
+
+define roomba position
+(
+	size [0.33 0.33 0.2]
+
+	block
+	(
+		points 5
+
+		point[0] [  0.330  0.000 ]
+		point[1] [ -0.165  0.285 ]
+		point[2] [ -0.285  0.165 ]
+		point[3] [ -0.285 -0.165 ]
+		point[4] [ -0.165 -0.285 ]
+
+		z [0.05 0.20]
+	)
+	sicklaser(pose [0 0 0 0])
+	axis(pose [0.0 0 0.2 0])
+
+	color "red"
+	gui_nose 1
+	drive "omni"
+)
+
+
+define lixeira position (
+	size [0.33 0.33 0.5]
+
+	block
+	(
+		points 16
+
+		point[0] [ 0.225 0.000 ]
+		point[1] [ 0.208 0.086 ]
+		point[2] [ 0.159 0.159 ]
+		point[3] [ 0.086 0.208 ]
+		point[4] [ 0.000 0.225 ]
+		point[5] [ -0.086 0.208 ]
+		point[6] [ -0.159 0.159 ]
+		point[7] [ -0.208 0.086 ]
+		point[8] [ -0.225 0.000 ]
+		point[9] [ -0.208 -0.086 ]
+		point[10] [ -0.159 -0.159 ]
+		point[11] [ -0.086 -0.208 ]
+		point[12] [ -0.000 -0.225 ]
+		point[13] [ 0.086 -0.208 ]
+		point[14] [ 0.159 -0.159 ]
+		point[15] [ 0.208 -0.086 ]
+		z [0.0 0.5]
+	)
+
+)
+
+define floorplan model
+(
+	color "gray30"
+
+	boundary 1
+
+	gui_nose 0
+	gui_grid 0
+	gui_move 0
+	gui_outline 0
+	gripper_return 0
+	fiducial_return 0
+	laser_return 1
+)
+
+resolution 0.05
+
+interval_sim 100
+
+window
+(
+	size [ 7.35 3.75]
+	rotate [0.000 0.000]
+	center [0 0]
+	scale 40
+)
+
+floorplan
+(
+	name "sala"
+	size [ 7.35  3.75 1]
+	size [10.86 6.89 1]
+	pose [0 0 0 0]
+	bitmap "./autolab.png"
+)
+
+
+roomba(pose [0 0 0 0] name "roomba0")
+lixeira(pose [1 0 0 0] name "lixo0" color "yellow")
+#roomba(pose [1 2 0 0] name "roomba1" color "green")
+#roomba(pose [2 2 0 0] name "roomba2" color "blue")

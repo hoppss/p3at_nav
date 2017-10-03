@@ -1,0 +1,26 @@
+<launch>
+<!--
+  <node pkg="map_server" type="map_server" name="map_server" args="$(find pioneer_2dnav)/map.yaml" >
+  </node>
+
+
+  <node pkg="lms1xx" type="LMS1xx_node" name="LMS1xx_node" output="screen">
+    <param name="host" value="10.208.6.224" />
+    <param name="frame_id" value="map" />
+  </node>
+
+
+	<node pkg="rosaria_client" type="teleop" name="teleop" output="screen">
+	</node> 
+-->
+	<node
+	pkg="tf"
+	type="static_transform_publisher"
+	name="laser_to_base_link"
+	args="0.215 0 0.13 0 0 0 /base_link /laser 100"
+	/>
+
+
+  <include file="$(find hector_mapping)/launch/mapping_default.launch" /> 
+
+</launch>

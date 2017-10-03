@@ -1,0 +1,30 @@
+<launch>
+
+  <master auto="start"/>
+
+  <node pkg="lms1xx" type="LMS1xx_node" name="LMS1xx_node" output="screen">
+    <param name="host" value="10.208.6.224" />
+  </node>
+
+
+  <!--
+  <param name="/use_sim_time" value="true"/>
+  -->
+
+  <node pkg="gmapping" type="slam_gmapping" name="gmapping_slam" output="screen" >
+  </node>
+
+  <!--- Run AMCL -->
+  <include file="$(find amcl)/examples/amcl_omni.launch" />
+
+
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find pioneer_2dnav)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find pioneer_2dnav)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find pioneer_2dnav)/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find pioneer_2dnav)/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find pioneer_2dnav)/base_local_planner_params.yaml" command="load" />
+  </node>
+
+</launch>

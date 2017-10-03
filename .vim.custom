@@ -1,0 +1,1 @@
+nnoremap <F5> :!tmux send-keys -t "consenso:0.5" C-z 'catkin_dat ~/myros' Enter<CR><CR>

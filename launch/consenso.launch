@@ -1,0 +1,192 @@
+<launch>
+		<machine 
+			name="r2d2" 
+			address="r2d2" 
+			user="labvcr2"
+			env-loader="$HOME/catkin_ws/devel/remote_env_loader.sh"
+		/>
+
+		<!--machine 
+			name="robocamp" 
+			address="robocamp" 
+			user="labvcr2"
+			env-loader="$HOME/catkin_ws/devel/remote_env_loader.sh"
+		/-->
+
+		<!--node
+			pkg="map_server"
+			type="map_server"
+			name="map"
+			args="$(find p3at_nav)/map/sala.yaml">
+			<param name="frame_id" value="global_map"/>
+		</node-->
+
+		<group ns="robot_0">
+
+		<param name="tf_prefix" value="robot_0"/>
+
+		<!--node machine="r2d2"
+			pkg="tf"
+			type="static_transform_publisher"
+			name="global_to_local_map"
+			args="0 0 0 0 0 0 /global_map robot_0/map 100"
+		/-->
+
+		<!--node machine="r2d2"
+		name="relay_map_odom"
+		pkg="topic_tools"
+		type="relay"
+		args="/map map"/-->
+	
+		<node machine="r2d2"
+			pkg="map_server"
+			type="map_server"
+			name="map"
+			args="$(find p3at_nav)/map/corredor2.yaml">
+			<param name="frame_id" value="robot_0/map"/>
+		</node>
+
+
+		<node machine="r2d2"
+		pkg="rosaria"
+		type="RosAria"
+		name="RosAria"
+		args="_port:=/dev/ttyS0">
+		</node>
+
+		<node machine="r2d2"
+			pkg="lms1xx" 
+			type="LMS1xx_node" 
+			name="laser" 
+			output="screen">
+
+			<param name="host" value="10.208.6.224" /> 
+			<!--param name="frame_id" value="robot_0/laser" /-->
+		</node>
+
+
+		<node machine="r2d2"
+			pkg="tf"
+			type="static_transform_publisher"
+			name="laser_to_base_link"
+			args="0.215 0 0.13 0 0 0 /robot_0/base_link /robot_0/laser 100"
+		/>
+
+		<node machine="r2d2" 
+			pkg="amcl"
+			type="amcl"
+			name="amcl"
+			output="screen">
+
+			<param name="max_particles" value="300"/>
+			<param name="update_min_a" value="0.261799"/>
+			<param name="update_min_d" value="0.05"/>
+			<param name="resample_interval" value="1"/>
+
+			<param name="laser_model_type" value="beam"/>
+			<param name="laser_max_beams" value="540"/>
+			<param name="laser_min_range" value="0.25"/>
+			<param name="laser_max_range" value="20"/>
+
+			<param name="odom_model_type" value="diff-corrected" />
+			<param name="odom_alpha1" value="0.2"/>
+			<param name="odom_alpha2" value="0.2"/>
+			<param name="odom_alpha3" value="0.2"/>
+
+			<param name="initial_cov_xx" value="5"/>
+			<param name="initial_cov_yy" value="5"/>
+			<param name="initial_cov_aa" value="0.523598"/>
+
+			<param name="base_frame_id" value="robot_0/base_link"/>
+			<param name="odom_frame_id" value="robot_0/odom"/>
+			<param name="global_frame_id" value="robot_0/map"/>
+		</node>
+	</group>
+
+		<!--node machine="robocamp"
+			pkg="tf"
+			type="static_transform_publisher"
+			name="global_to_local_map"
+			args="0 0 0 0 0 0 /robot_1/map /global_map 100"
+		/-->
+
+	<!--group ns="robot_1">
+		<param name="tf_prefix" value="robot_1"/>
+
+		<node machine="robocamp"
+		name="relay_map_odom"
+		pkg="topic_tools"
+		type="relay"
+		args="/map map"/>
+
+
+		<node machine="robocamp"
+			pkg="map_server"
+			type="map_server"
+			name="map"
+			args="/home/labvcr2/catkin_ws/src/labvcr2/p3at_nav/map/corredor2.yaml">
+			<param name="frame_id" value="robot_1/map"/>
+		</node>
+
+		<node machine="robocamp"
+		pkg="rosaria"
+		type="RosAria"
+		name="RosAria"
+		args="_port:=/dev/ttyACM0">
+
+		<param name="base_link_frame" value="robot_1/base_link"/>
+		<param name="odom_frame" value="robot_1/odom"/>
+		</node>
+
+		<node machine="robocamp"
+			pkg="lms1xx" 
+			type="LMS1xx_node" 
+			name="laser" 
+			output="screen">
+
+			<param name="host" value="192.168.0.1" /> 
+			<param name="frame_id" value="robot_1/laser" />
+		</node>
+
+		<node machine="robocamp"
+			pkg="tf"
+			type="static_transform_publisher"
+			name="laser_to_base_link"
+			args="0.215 0 0.13 0 0 0 /robot_1/base_link /robot_1/laser 100"
+		/>
+
+		<node machine="robocamp" 
+			pkg="amcl"
+			type="amcl"
+			name="amcl"
+			output="screen">
+
+
+			<param name="save_pose_rate" value="0.05"/>
+
+			<param name="max_particles" value="300"/>
+			<param name="update_min_a" value="0.261799"/>
+			<param name="update_min_d" value="0.05"/>
+			<param name="resample_interval" value="1"/>
+
+			<param name="laser_model_type" value="beam"/>
+			<param name="laser_max_beams" value="100"/>
+			<param name="laser_min_range" value="0.25"/>
+			<param name="laser_max_range" value="20"/>	
+
+			<param name="odom_model_type" value="diff-corrected" />
+			<param name="odom_alpha1" value="0.2"/>
+			<param name="odom_alpha2" value="0.2"/>
+			<param name="odom_alpha3" value="0.2"/>
+
+			<param name="initial_cov_xx" value="7"/>
+			<param name="initial_cov_yy" value="7"/>
+			<param name="initial_cov_aa" value="0.523598"/>
+
+			<param name="base_frame_id" value="robot_1/base_link"/>
+			<param name="odom_frame_id" value="robot_1/odom"/>
+			<param name="global_frame_id" value="/robot_1/map"/>
+		</node>
+
+		</group-->
+</launch>

@@ -1,0 +1,28 @@
+<launch>
+	<group>
+		<machine 
+		name="r2d2" 
+		address="192.168.1.2" 
+		user="labvcr2"
+		env-loader="$HOME/catkin_ws/devel/remote_env_loader.sh"
+		default="true" 
+		/>
+
+
+		<node machine="r2d2"
+		pkg="rosaria"
+		type="RosAria"
+		name="ra"
+		args="_port:=/dev/ttyS0"
+		/>
+
+		<!--node machine="r2d2"
+		pkg="map_server"
+		type="map_server"
+		name="ms"
+		args="/home/labvcr2/catkin_ws/src/pioneer_2dnav/map/corredor2.yaml"
+		/-->
+		<!--include file=
+		"$(find pioneer_2dnav)/launch/pionneer_configuration.launch"/-->
+	</group>
+</launch>

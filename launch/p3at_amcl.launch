@@ -1,0 +1,35 @@
+<launch>
+
+  <node pkg="rosaria" type="RosAria" name="RosAria" output="screen">
+    <param name="port" value="/dev/ttyS0" />
+    <remap from="RosAria/cmd_vel" to="cmd_vel" />
+  </node>
+
+  <node pkg="map_server" type="map_server" name="map_server" args="$(find pioneer_2dnav)/map/sala.yaml"> 
+   <param name="frame_id" value="map"/>
+  </node>
+
+  <node pkg="lms1xx" type="LMS1xx_node" name="LMS1xx_node" output="screen">
+    <param name="host" value="10.208.6.224" /> 
+    <param name="frame_id" value="laser" />
+  </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="test" args="0.215 0 0.13 0 0 0 /base_link /laser 100"/>
+  <!--
+  <node pkg="tf" type="static_transform_publisher" name="test2" args="0 0 0 0 0 0 /map /odom 100"/>
+  -->
+
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+    <param name="odom_model_type" value="diff-corrected" />
+    <param name="odom_alpha1" value="0.2"/>
+    <param name="odom_alpha2" value="0.2"/>
+    <param name="odom_alpha3" value="0.2"/>
+    <param name="initial_cov_xx" value="20"/>
+    <param name="initial_cov_yy" value="20"/>
+    <param name="initial_cov_aa" value="0.523598"/>
+  </node>
+
+
+
+</launch>
+
